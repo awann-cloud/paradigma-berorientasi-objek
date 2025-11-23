@@ -4,8 +4,9 @@ import java.util.Scanner;
 
 public class GameApp {
     private Scanner scanner;
-    private UserAccount user;
+    private Account user;
     private MachineManager manajerMesin;
+    private AccountManager accountManager = new AccountManager();
 
     public GameApp() {
         scanner = new Scanner(System.in);
@@ -13,32 +14,63 @@ public class GameApp {
     }
 
     public void start() {
-        loginMenu();
+        autentikasiMenu();
     }
+    
+    public void register() {
+        if (scanner.hasNextLine()) scanner.nextLine();
 
-    private void loginMenu() {
-
-        boolean cek = true;
-        while (cek) { 
-        user = new UserAccount("fuira", "123");
-
-        System.out.println("=== LOGIN ===");
+        System.out.println("\n=== REGISTRASI ===");
         System.out.print("Username: ");
-        String usern = scanner.nextLine();
+        String username = scanner.nextLine();
         System.out.print("Password: ");
         String pw = scanner.nextLine();
 
-        boolean hasil = user.login(usern, pw);
+        accountManager.register(username, pw);
+    }
 
-            if (hasil == true) {
-                System.out.println("Login Berhasil !\n");
-                cek = false;
-                mainMenu();
-            } else {
-                System.out.println("Password / Username Salah.\n");
+    public void login() {
+        if (scanner.hasNextLine()) scanner.nextLine();
+
+        System.out.println("\n=== LOGIN ===");
+        System.out.print("Username: ");
+        String username = scanner.nextLine();
+        System.out.print("Password: ");
+        String pw = scanner.nextLine();
+
+        user = accountManager.login(username, pw);
+
+        if (user != null) {
+            System.out.println("Login berhasil!");
+            mainMenu();
+        } else {
+            System.out.println("Username atau password salah.");
+        }
+    }
+
+    private void autentikasiMenu() {
+
+        while (true) {
+            System.out.print(
+                "\n=== MENU AUTENTIKASI ===\n" +
+                "1. Login\n" +
+                "2. Registrasi\n" +
+                "0. Keluar\n" +
+                "Pilih: "
+            );
+
+            int pilihan = scanner.nextInt();
+
+            switch (pilihan) {
+                case 1 -> login();
+                case 2 -> register();
+                case 0 -> {
+                    System.out.println("Terima Kasih!");
+                    return;
+                }
+                default -> System.out.println("Menu tidak valid!.");
             }
         }
-
     }
 
     private void mainMenu() {
@@ -50,7 +82,8 @@ public class GameApp {
                 "2. Tambah Coin\n" +
                 "3. Cek Saldo Koin\n" +
                 "4. Mulai Permainan\n" +
-                "0. Exit\n" +
+                "5. Logout\n" +
+                "0. Keluar\n" +
                 "Pilih: "
             );
 
@@ -62,6 +95,10 @@ public class GameApp {
                 case 2 -> tambahCoin();
                 case 3 -> cekSaldo();
                 case 4 -> permainan();
+                case 5 -> {
+                    autentikasiMenu();
+                    return;
+                }
                 case 0 -> {
                     System.out.println("\nByee, Terima kasih sudah bermain !");
                     return;
