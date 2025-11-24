@@ -73,6 +73,20 @@ public class GameApp {
         }
     }
 
+    public void prizeMenu() {
+        System.out.println("\n=== DAFTAR HADIAH SETIAP MESIN ===");
+
+        int index = 1;
+        for (Mesin m : manajerMesin.getMachines()) {
+            System.out.println("\n" + index + ". " + m.getNamaMesin());
+            m.lihatDaftarHadiah();
+            index++;
+        }
+
+        System.out.println("\nTekan ENTER untuk kembali...");   
+        scanner.nextLine();
+    }
+
     private void mainMenu() {
         while (true) {
             
@@ -138,10 +152,18 @@ public class GameApp {
             System.out.println(i + ". " + m.namaMesin + " (Chance: " + (m.successRate*100) + "%)");
             i++;
         }
+        
+        int lihatHadiah = i;
+        System.out.println(lihatHadiah + ". Lihat Daftar Hadiah");
 
         System.out.print("Pilihan: ");
         int pilihan = scanner.nextInt();
         scanner.nextLine();
+
+        if (pilihan == lihatHadiah) {
+            prizeMenu();
+            return;
+        }
 
         Mesin selected = manajerMesin.getMachines().get(pilihan - 1);
 

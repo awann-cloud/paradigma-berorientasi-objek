@@ -1,6 +1,6 @@
 package ProjekUAS;
 
-public class Doll {
+public abstract class Doll {
     private String namaBoneka;
     private String rarity;
 
